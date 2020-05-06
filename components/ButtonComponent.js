@@ -9,19 +9,25 @@ StyleSheet
 from 'react-native'
 
 const CustomButton=(props)=>{
-
-    var btncolor = props.color!=undefined?props.color:'blue'
+    if(props.disabled){
+        var btncolor = 'grey'
+    }
+   else{
+      var btncolor = props.color!=undefined?props.color:'blue'
+   }
+    
 
     return(
 <TouchableOpacity
       onPress = {props.onPressEvent}
       activeOpacity={0.5}
       style = {styles.styleButton}
+      disabled ={props.disabled}
       
       >
         <View 
         
-        style={{borderRadius:50, backgroundColor:btncolor}}>
+        style={{marginLeft:10,borderRadius:50, backgroundColor:btncolor}}>
     <Text style={{
         fontSize:props.textSize,
         color:props.textColor,
@@ -52,7 +58,7 @@ const styles = StyleSheet.create({
       },
 
       styleButton:{
-          width:'15%',
+          width:'25%',
       
           
       }

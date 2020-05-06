@@ -14,12 +14,13 @@ import {
 } from 'react-native';
 
 import CustomButton from "./components/ButtonComponent";
+import {todoItems} from "./constants/dummyTodoList";
 
 
 const  App=()=>{
 
   const [getText,setText] = useState("");
-  const [getList,setList] = useState([]);
+  const [getList,setList] = useState(todoItems);
   const [buttontitle,setbuttontitle] = useState('Add');
   const [itemindex,setitemindex] = useState();
   
@@ -29,10 +30,7 @@ const  App=()=>{
   const addItems=()=>{
     console.log(getText);
     if(buttontitle ==="Add"){
-      if(getText==""){
-        
-      
-      }else{
+   
          
         setList([
           ...getList,
@@ -45,7 +43,7 @@ const  App=()=>{
     
         setText(''); 
       }
-    }
+
     else if(buttontitle==="update"){
       if(getText==""){
         setbuttontitle("Add")
@@ -76,15 +74,65 @@ const  App=()=>{
       setitemindex(num)
   }
 
+  const scrollView = (
+    <ScrollView style={styles.scrollviewstyle}>
+
+    {getList.map((item,index)=> 
+    <TouchableOpacity
+    key={item.key}
+    activeOpacity ={0.7}
+    onPress={()=>updateItems(item,index)}
+    >
+      
+  
+      <View 
+      key={item.key}
+      style={styles.scrollviewItem}>
+  
+     <TouchableOpacity
+     
+     
+     >
+      <View style={styles.indexTextView}>
+      <Text style={styles.indexText}>{index + 1}</Text>
+      </View>
+      </TouchableOpacity>
+  
+      <Text  style={styles.scrollviewText}>{item.data}</Text>
+  
+      <TouchableOpacity 
+      onPress={()=>removeItems(item.key)}
+      >
+      <View style={styles.crossTextView}>
+    <Text style={styles.crossText}>X</Text>
+      </View>
+      </TouchableOpacity>
+      
+      </View>
+    </TouchableOpacity> 
+      )}
+      </ScrollView>  
+
+  );
+
+  const emptyscrollView = (
+    <View style = {{paddingTop:30}}>
+    <Text style = {{fontSize:20,fontStyle:'italic',color:'grey'}}>Items list is empty </Text>
+  </View>
+
+  );
+
   return(
     
     <View 
     style = {styles.container}
+
          >
+           <Text style={styles.title}>To do</Text>  
            <View style = {styles.topcontainer}>
 
          
-       <Text style={styles.title}>To do</Text>    
+         
      
       
       <View style= {styles.inputContainer}>
@@ -103,6 +151,7 @@ const  App=()=>{
       color = 'darkkhaki'
       textSize ={20}
       textColor = "white"
+      disabled = {getText.length<=0}
       
 
       />
@@ -114,50 +163,12 @@ const  App=()=>{
       */}
       </View>
 
-
-  <View style = {{fontSize: 26}}>
-
-  <Text>{getText}</Text>
-  </View>
-  </View>
-
-  <ScrollView style={styles.scrollviewstyle}>
-
-  {getList.map((item,index)=> 
-  <TouchableOpacity
-  key={item.key}
-  activeOpacity ={0.7}
-  onPress={()=>updateItems(item,index)}
-  >
     
 
-    <View 
-    key={item.key}
-    style={styles.scrollviewItem}>
-
-   <TouchableOpacity
-   
-   
-   >
-    <View style={styles.indexTextView}>
-    <Text style={styles.indexText}>{index + 1}</Text>
-    </View>
-    </TouchableOpacity>
-
-    <Text  style={styles.scrollviewText}>{item.data}</Text>
-
-    <TouchableOpacity 
-    onPress={()=>removeItems(item.key)}
-    >
-    <View style={styles.crossTextView}>
-  <Text style={styles.crossText}>X</Text>
-    </View>
-    </TouchableOpacity>
-    
-    </View>
-  </TouchableOpacity> 
-    )}
-    </ScrollView>  
+  </View>
+ 
+  {getList.length<=0?emptyscrollView:scrollView}
+  
      
      </View>
     
@@ -222,6 +233,7 @@ const  App=()=>{
       borderRadius:10,
       flexDirection:"row",
       justifyContent:'space-between',
+      
 
     },
 
@@ -230,9 +242,10 @@ const  App=()=>{
 
     container:{
       flex:1,
-      backgroundColor:'lightseagreen',
+      backgroundColor:'paleturquoise',
       alignItems:'center',
       padding:60,
+      
 
     },
 
@@ -240,14 +253,17 @@ const  App=()=>{
     fontSize:50,
     color:'grey',
     justifyContent:'center',
+    paddingBottom:20
+    
     },
 
     inputContainer:{
      
       flexDirection:'row',
       width:'80%',
-      justifyContent:'space-between',
-      paddingTop:20,
+      justifyContent:"space-between",
+      paddingTop:10,
+      paddingBottom:10,
       alignItems:'center',
       color:'white'
       
@@ -257,12 +273,14 @@ const  App=()=>{
     
     textInput:{
     
-      borderBottomWidth:2,
+      borderBottomWidth:3,
       borderColor:'green',
-      width:'80%',
+      width:'70%',
       //borderRadius:10,
       fontSize:20,
-      color:'black'
+      color:'black',
+      
+      
     },
 
     image: {
@@ -278,22 +296,23 @@ const  App=()=>{
     ,
     topcontainer:{
       flexDirection:'column',
-      width:'90%',
+      width:'100%',
       justifyContent:"space-around",
       paddingTop:20,
       alignItems:'center',
       color:'white',
       backgroundColor:'bisque',
-      height:'40%',
+      
+  
 
     },
     scrollviewstyle:{
       flexDirection:'column',
-      width:'90%',
+      width:'100%',
       paddingTop:30,
       color:'white',
       backgroundColor:'bisque',
-      height:'40%',
+      
       margin:20,
     }
 
